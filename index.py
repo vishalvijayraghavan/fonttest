@@ -1,7 +1,7 @@
 import os,sys
 import math, operator
 from functools import reduce
-from PIL import Image, ImageChops, ImageEnhance
+from PIL import Image, ImageChops
 from lib.image_processing import ImageProcessing
 
 class FontTest(ImageProcessing):
@@ -20,25 +20,7 @@ class FontTest(ImageProcessing):
             os.makedirs(self.cropped_img_dir)
         if not os.path.exists(self.result_img_dir):
             os.makedirs(self.result_img_dir)
-            
-    def split_image(self, image, image_no=0, file_no=0, size_no=0):
-        '''
-        This method will split single into multiple test-case images 
-        '''
-        split_image_list    = list()
-        im                  = self.checkImageOrObject(image)        
-        cropped_text        = self.widespace_remover(im)
-        width, height       = cropped_text.size
-        
-        for line_number in range(self.no_of_test_case):
-            box = (0, line_number*(height/self.no_of_test_case), width, height/self.no_of_test_case*(line_number+1))
-            cropped_image = cropped_text.crop(box)
-            cropped_image = self.widespace_remover(cropped_image)
-            split_image_list.append(cropped_image)
-            if self.debug:
-                cropped_image.save("tmp/cropped_images/cropped_image_{}_{}_{}_{}".\
-                    format(image_no, file_no, line_number, size_no), format=self.image_file_extension)
-        return split_image_list
+
 
     def render(self, font_file_list, font_size_list):
         file_list = list()
@@ -56,17 +38,6 @@ class FontTest(ImageProcessing):
                 file_list.append(output_filename)
         return file_list
 
-    def merge_image(self, img1, img2):
-        image1 = self.checkImageOrObject(img1)
-        image2 = self.checkImageOrObject(img2)
-        width_1, height_1 = image1.size
-        width_2, height_2 = image2.size
-        # create a blank image with white background 
-        new_im = Image.new(mode="RGB", size=(width_1, height_1+height_2+25), color=(255,255,255,255))        
-        new_im.paste(image1, (0,10))
-        new_im.paste(image2, (0,height_1+15))
-        # new_im.save("test",format=self.image_file_extension)
-        return new_im
 
     def compute(self):
         # Render all fonts in all specified sizes 
@@ -109,4 +80,3 @@ if __name__ == "__main__":
     test_file = "test.txt"
     obj = FontTest(font_file_list, font_size_list, test_file)    
     obj.compute()
-    
