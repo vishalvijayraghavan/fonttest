@@ -65,8 +65,12 @@ class Engine():
         '''
         This method will clone give repo
         '''
+        dir_name = self.getfilename(global_config["git_url"])
+        if os.path.exists("./tmp/"+dir_name) and os.path.isdir("./tmp/"+dir_name):	
+            os.system("rm -rf ./tmp/"+dir_name)
         git.Git("./tmp/").clone(global_config["git_url"])
         
+        return "./tmp/"+dir_name+"/fonttest"
 
     def fonttest(self, global_config):
         '''
@@ -74,8 +78,7 @@ class Engine():
         '''
         ref_image_dir = None 
         if global_config["git_url"]:
-            self.git_repoclone(global_config)
-            ref_image_dir = None
+            ref_image_dir = self.git_repoclone(global_config)
         else:
             ref_image_dir = global_config["local_ref_dir"]
 
@@ -98,7 +101,7 @@ class Engine():
         '''
         This method will generate refrence image 
         '''
-        print("here")
+        
         self.render(
             font_filepath = global_config["test_font_file"],
             font_sizelist = global_config["font_size_list"], 

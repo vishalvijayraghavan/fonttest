@@ -13,15 +13,17 @@
 
 ## Installation
 ---
-Install the dependencies and devDependencies and start the server.
+Install the dependencies.
 ```sh
+$ <clone this repo>
 $ cd fonttest
 $ pip3 install --user -r requirement.txt
-$ sudo dnf install harfbuzz-devel (for fedora)
+$ sudo dnf install harfbuzz-devel (for fedora users)
 ```
 
 ## Usage
 ---
+
 - Fontdiff: 
 Compare two font version and check diff in glyphs
     ```
