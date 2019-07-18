@@ -30,11 +30,13 @@ class Engine():
             filename = "./tmp/{}_{}".format(output_filename,size)
         
             cmd = "hb-view \
-                --font-file={} \
-                --text-file={} \
-                --output-file={} \
-                --output-format={} \
-                --font-size={}".format(font_filepath, testfile, filename, imagefile_extension, size)
+                --font-file={0} \
+                --text-file={1} \
+                --output-file={2} \
+                --output-format={3} \
+                --font-size={4} \
+                --line-space={4} \
+                --margin={4},{4},{4},{4} ".format(font_filepath, testfile, filename, imagefile_extension, size)
             os.system(cmd)
             file_list.append(filename)
             

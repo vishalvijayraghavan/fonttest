@@ -1,7 +1,9 @@
+import warnings
 import os,sys
 import math, operator
 from functools import reduce
 from PIL import Image, ImageChops
+warnings.simplefilter('ignore', Image.DecompressionBombWarning)
 
 class ImageProcessing:
 
@@ -64,22 +66,19 @@ class ImageProcessing:
             
             # check if image path or object was invalid
             if img1 and img2:
-                cropped_text1       = self.widespace_remover(img1)
-                cropped_text2       = self.widespace_remover(img2)
-                
-                width, height       = cropped_text1.size
+
+                width, height       = img1.size
                 
                 for line_number in range(global_config["no_of_test_case"]):
 
                     box = (0, line_number*(height/global_config["no_of_test_case"]), width, height/global_config["no_of_test_case"]*(line_number+1))
                     
-                    cropped_image1 = cropped_text1.crop(box)
-                    cropped_image1 = self.widespace_remover(cropped_image1)
-                    
-                    cropped_image2 = cropped_text2.crop(box)
-                    cropped_image2 = self.widespace_remover(cropped_image2)
-
+                    cropped_image1 = img1.crop(box)
+                    # cropped_image1 = self.widespace_remover(cropped_image1)
                     cropped_image1.save("{}/{}_{}".format(global_config["cropped_img_dir"], imagename1, line_number),format=global_config["image_file_extension"])
+
+                    cropped_image2 = img2.crop(box)
+                    # cropped_image2 = self.widespace_remover(cropped_image2)
                     cropped_image2.save("{}/{}_{}".format(global_config["cropped_img_dir"], imagename2, line_number),format=global_config["image_file_extension"])
                     
                     # check if images are same or not as per threshold specified 
@@ -89,7 +88,7 @@ class ImageProcessing:
                         outfilename = "{}/{}_{}".format(global_config["result_img_dir"], imagename1+imagename2, line_number)
                         img.save(outfilename ,format=global_config["image_file_extension"])
                         result_list.append(outfilename)
-                return result_list 
+        return result_list 
                 
 
     def merge_image(self, img1, img2):
