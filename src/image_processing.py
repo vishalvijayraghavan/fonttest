@@ -79,7 +79,9 @@ class ImageProcessing:
         '''
         result_list = list()
         
-        for image1,image2 in zip(base_imagelist[:int(len(base_imagelist)/2)],base_imagelist[int(len(base_imagelist)/2):]):
+        #creating base image generator
+        base_images_generator = ((x,y) for x,y in zip(base_imagelist[:int(len(base_imagelist)/2)],base_imagelist[int(len(base_imagelist)/2):]))
+        for image1,image2 in base_images_generator:
             cropped_image1 = self.crop_and_filter_image(image1, global_config)
             cropped_image2 = self.crop_and_filter_image(image2, global_config)
             for glyph_img1, glyph_img2 in zip(cropped_image1,cropped_image2):
