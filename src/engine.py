@@ -22,7 +22,8 @@ class Engine():
 
     def render(self, font_filepath, font_sizelist, output_filename, testfile, imagefile_extension):
         '''
-        This function will render test file using harfbuzz  
+        This function will render test file using harfbuzz
+        return: list of rendered image filenames   
         '''
         file_list = list()
         for size in font_sizelist:
@@ -48,8 +49,9 @@ class Engine():
     def fontdiff(self, global_config):
         '''
         This method will check for font version diff for given two fonts
+        return: None
         '''
-        base_image_list = list() 
+        base_image_list = list()
         for count in range(len(global_config["test_font_files"])):
             tmp = self.render(
                 font_filepath = global_config["test_font_files"][count],
@@ -66,6 +68,7 @@ class Engine():
     def git_repoclone(self, global_config):
         '''
         This method will clone give repo
+        return: clone location
         '''
         dir_name = self.getfilename(global_config["git_url"])
         if os.path.exists("./tmp/"+dir_name) and os.path.isdir("./tmp/"+dir_name):	
@@ -77,6 +80,7 @@ class Engine():
     def fonttest(self, global_config):
         '''
         This method will clone/use local reference image and check for rendering errors
+        return: None
         '''
         ref_image_dir = None 
         if global_config["git_url"]:
@@ -92,7 +96,7 @@ class Engine():
             imagefile_extension = global_config["image_file_extension"]
         )
 
-        tmp_list = [ref_image_dir+"/"+ self.getfilename(fontfilename) for fontfilename in base_image_list]
+        tmp_list = [ref_image_dir+"/ref_"+ self.getfilename(fontfilename) for fontfilename in base_image_list]
         base_image_list.extend(tmp_list)
         
         obj = ImageProcessing()
@@ -102,12 +106,13 @@ class Engine():
     def generate_reference_image(self, global_config):
         '''
         This method will generate refrence image 
+        return: None
         '''
         
         self.render(
             font_filepath = global_config["test_font_file"],
             font_sizelist = global_config["font_size_list"], 
-            output_filename = "{}".format(self.getfilename(global_config["test_font_file"])), 
+            output_filename = "ref_{}".format(self.getfilename(global_config["test_font_file"])),
             testfile = global_config["test_file"], 
             imagefile_extension = global_config["image_file_extension"]
         )

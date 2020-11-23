@@ -13,12 +13,13 @@ class ImageProcessing:
     def checkImageOrObject(self, src_image):
         '''
         This method will check if the parameter "src_image" is image file path or image object  
+        return: image object
         '''
         try:
             if type(src_image) == str:
                 if not os.path.exists(src_image):
-                    print("{} : invalid image path given".format(src_image))
-                    return False
+                    print("{}: No such image file".format(src_image))
+                    sys.exit(1)
                 else:
                     return Image.open(src_image)
             else:
@@ -30,6 +31,7 @@ class ImageProcessing:
     def check_image_diff(self, image_1, image_2):
         '''
         This method will check if two images are different and return diff count 
+        return: float diff value 
         '''
         image_1 = self.widespace_remover(image_1)
         image_2 = self.widespace_remover(image_2)
@@ -46,6 +48,7 @@ class ImageProcessing:
     def widespace_remover(self,image):
         '''
         Remove widespace before and after text
+        return: cropped image
         '''
         im = self.checkImageOrObject(image)
         if im: 
@@ -61,7 +64,8 @@ class ImageProcessing:
         '''
         This method will open image, crop image and remove widespaces. 
         split into multiple image chunk(as per no of testcases)
-        and will return/yield (image_obj ,testcase line number) 
+        and will return/yield (image_obj ,testcase line number)
+        return: 
         '''
         img = self.checkImageOrObject(image_path)
         width, height  = img.size
@@ -76,6 +80,7 @@ class ImageProcessing:
     def split_image(self, base_imagelist, global_config):
         '''
         This method will split single into multiple test-case images 
+        return: list of single glyph/testcase images 
         '''
         result_list = list()
         
@@ -104,6 +109,7 @@ class ImageProcessing:
     def merge_image(self, img1, img2):
         '''
         This function will merge two error images into one
+        return: new merge image
         '''
         image1 = self.checkImageOrObject(img1)
         image2 = self.checkImageOrObject(img2)

@@ -3,7 +3,6 @@ import argparse
 import logging
 import os,sys
 
-
 def arg_parse():
 
     parser = argparse.ArgumentParser(prog='PROG',description="Fonttest is a font testing tool, it is capable \
@@ -25,9 +24,9 @@ def arg_parse():
     parser_b = subparsers.add_parser("fonttest", help="This option will compare font with reference glyph file in git/locally")
     parser_b.add_argument("-f", "--fontfile", required=True, help="Pass fontfiles to be tested using glyph compare")
     parser_b.add_argument("-g", "--giturl", help="Git repo url to be cloned for reference glyphs.\
-        Note: make sure your repo has fonttest dir and ref images with naming convention as <fontname>_<size>")
+        Note: make sure your repo has fonttest dir and ref images with naming convention as ref_<fontname>_<size> (eg: ref_Lohit-Marathi_50)")
     parser_b.add_argument("-l", "--local", help="Directory path to local reference glyph directory\
-        Note: make sure you have ref images with naming convention as <fontname>_<size>")
+        Note: make sure you have ref images with naming convention as ref_<fontname>_<size> (eg: ref_Lohit-Marathi_50)")
     parser_b.add_argument("-t", "--testfile",required=True, help="Testfile with testcases(test strings)")
     parser_b.add_argument("-s", "--size", default="50,150,256", help="Different em sizes seperated by ','\
         eg:'10,50,....,256'")
@@ -50,15 +49,16 @@ if __name__ == "__main__":
     
     config = dict()
     config["image_file_extension"]     = "PNG"
-    config["test_file"]                 = args.testfile
-    config["font_size_list"]           = args.size.split(",")
+    config["test_file"]                = args.testfile
+    config["font_size_list"]           = [i.strip() for i in args.size.split(",")]
     config["cropped_img_dir"]          = "./tmp/cropped_images"
     config["result_img_dir"]           = "./tmp/result_images"
     config["diff_threshold"]           = 0.0
 
     if args.subparser_name == "fontdiff":    
         config["command"] = "fontdiff"
-        config["test_font_files"] = args.fontfiles.split(",")
+        # font filename split into list
+        config["test_font_files"] = [i.strip() for i in args.fontfiles.split(",")]
         for font in config["test_font_files"]: 
             if not os.path.exists(font):
                 print("{} file doesnot exist".format(font))
@@ -69,6 +69,9 @@ if __name__ == "__main__":
         config["test_font_file"] = args.fontfile
         config["git_url"] = args.giturl
         config["local_ref_dir"] = args.local
+
+        if config["local_ref_dir"].endswith("/"):
+            config["local_ref_dir"].rstrip("/")
 
         if not config["git_url"] and not config["local_ref_dir"]:
             print("please use -l or -g option")
@@ -90,4 +93,3 @@ if __name__ == "__main__":
         sys.exit(0)
 
     obj = Engine(config)
-    

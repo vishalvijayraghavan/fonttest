@@ -46,7 +46,8 @@ Compare two font version and check diff in glyphs
 - Fonttest: 
 Compare the reference glyph image(locally or clone from your font git repo) with newly generated font glyph image and show diff. 
 Note: if want to use git repo to save reference glyph image, make sure your repo has fonttest dir and ref images 
-with naming convention as <fontname>_<emsize>
+with naming convention as "ref_<fontname>_<emsize>"
+eg: ref_Lohit-Marathi_50
     ```
     python3  fonttest.py  fonttest -t  <test.txt>  -f  <"new-font-file.ttf>  -s  <"10,50....,256">
     
@@ -58,11 +59,13 @@ with naming convention as <fontname>_<emsize>
               -g GITURL, --giturl GITURL
                                     Git repo url to be cloned for reference glyphs. Note:
                                     make sure your repo has fonttest dir and ref images
-                                    with naming convention as <fontname>_<size>
+                                    with naming convention as ref_<fontname>_<size>
+                                    (eg: ref_Lohit-Marathi_50)
               -l LOCAL, --local LOCAL
                                     Directory path to local reference glyph directory
                                     Note: make sure you have ref images with naming
-                                    convention as <fontname>_<size>
+                                    convention as ref_<fontname>_<size>
+                                    (eg: ref_Lohit-Marathi_50)
               -t TESTFILE, --testfile TESTFILE
                                     Testfile with testcases(test strings)
               -s SIZE, --size SIZE  Different em sizes seperated by ','
@@ -89,4 +92,3 @@ Generate reference glyph image so that it can used by Font reference matching fe
 ## License
 ---
 ##### GPL-V3.0
-
